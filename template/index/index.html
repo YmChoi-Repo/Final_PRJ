@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title> Leaflet Test</title>
+  <!-- link rel, script src > unpkg뭐시기로 시작하는거 = Leaflet를 실행하게 하는 코드-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <style>
+      body {
+        margin : 0;
+        padding : 0;
+      }
+
+      #map {
+        width : 100%;
+        height : 100vh;
+      }
+  </style>
+</head>
+<body>
+<div id = "map"></div>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+//var map변수를 통하여 Leaflet 지도를 불러옴, setView에 있는 괄호 순서대로 위도, 경도, 줌 단계
+var map = L.map('map').setView([37.5664700, 126.9779630], 17);
+
+//타일레이어 태그는 https://cloud.maptiler.com/tiles/에서 가져옴.
+var osm = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=z7eh7X1yVcfsTvvVR6Bz', {
+  attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+}).addTo(map);
+
+//지도에서 geocoder을 가져옴.
+L.Control.geocoder().addTo(map_init);
+if (!navigator.geolocation) {
+    console.log("Your browser doesn't support geolocation feature!")
+} else {
+    setInterval(() => {
+        navigator.geolocation.getCurrentPosition(getPosition)
+    }, 5000);
+};
+var marker, circle, lat, long, accuracy;
+
+function getPosition(position) {
+    // console.log(position)
+    lat = position.coords.latitude
+    long = position.coords.longitude
+    accuracy = position.coords.accuracy
+
+    if (marker) {
+        map_init.removeLayer(marker)
+    }
+
+    if (circle) {
+        map_init.removeLayer(circle)
+    }
+
+    marker = L.marker([lat, long])
+    circle = L.circle([lat, long], { radius: accuracy })
+
+    var featureGroup = L.featureGroup([marker, circle]).addTo(map_init)
+
+    map_init.fitBounds(featureGroup.getBounds())
+
+    console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
+}
+</script>
+</body>
+</html>
