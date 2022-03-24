@@ -8,8 +8,7 @@ router.get('/', (req, res) => {
 
 router.get('/index', (req, res) => {
     res.render('index/index.html', {
-        message: "hello!!!!!!!!",
-        online: "online now"
+
     })
 });
 module.exports = router;
