@@ -1,7 +1,10 @@
-// express, nunjucks, path 패키지 불러오기
+// express, nunjucks, path, Parser, morgan 패키지 불러오기
 const express = require('express')
+const morgan = require('morgan');
 const nunjucks = require('nunjucks');
 const path = require('path');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // 기본 app 생성
 const app = express();
@@ -13,18 +16,21 @@ const index = require('./routes/index')
 const map = require('./routes/map')
 
 
-// settings
+// require로 불러온거 settings
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-// template를 인식하고 사용하겠다
-// autoescape는 보안상 true
-// express : app는 사용할 주체
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// (Nunjucks Setting)template를 인식하고 사용하겠다, autoescape는 보안상 true, express : app는 사용할 주체
 nunjucks.configure('template', {
     autoescape: true,
     express: app
 });
 
-//static files
+//static files(cssjs 폴더와 연결시켜주는 코드)
 app.use(express.static(path.join(__dirname, 'cssjs')));
 
 

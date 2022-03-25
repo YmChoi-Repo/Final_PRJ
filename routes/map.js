@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 // express 패키지의 Router를 가져온다.
 
 router.get('/', (req, res) => {
@@ -7,8 +8,10 @@ router.get('/', (req, res) => {
 })
 
 router.get('/map', (req, res) => {
-    res.render('map/map.html', {
+        res.render('map/map.html', {
+            
 
     })
+
 });
 module.exports = router;

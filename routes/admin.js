@@ -10,8 +10,8 @@ router.get('/', (req, res) => {
 //     res.send('admin products');
 // })
 
-router.get('/products', (req, res) => {
-    res.render('admin/products.html', {
+router.get('/admin', (req, res) => {
+    res.render('admin/admin.html', {
         message: "hello!!!!!!!!",
         online: "online now"
     })
